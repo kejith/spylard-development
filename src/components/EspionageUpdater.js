@@ -159,18 +159,31 @@ function parseEspionageHead(espionageReportQuery) {
     }
 
     // Date
-    var readDate = (metaInfoString) => {
-        var findDateRegExp = /(?<=] am ).*$/
-        var matches = findDateRegExp.exec(metaInfoString)
-        var date = new Date()
+    var readDate = metaInfoString => {
+        var findDateRegExp = /(?<=] am ).*$/;
+        var matches = findDateRegExp.exec(metaInfoString);
+        var date = new Date();
 
-        if (matches) {
-            date = new Date(matches[0])
-            return date.toISOString()
+        function isValidDate(d) {
+            return d instanceof Date && !isNaN(d);
         }
 
-        return date.toISOString()
-    }
+        if (matches) {
+            date = new Date(matches[0]);
+
+            if (!isValidDate(date)) {
+                console.log({
+                    metaInfoString,
+                    matches,
+                    date
+                });
+                console.log(error);
+                date = new Date()
+            } 
+        }
+
+        return date.toISOString();
+    };
 
     var coords = readCoordinates(metaInfoString)
     var date = readDate(metaInfoString)
@@ -233,10 +246,10 @@ export const setupEspionageUpdate = async function setupEspionageUpdate() {
 
     loadEspionageInformation(espionageIds, {
         done: (existentEspionages) => {
-            if(existentEspionages != null && Array.isArray(existentEspionages)){
+            if (existentEspionages != null && Array.isArray(existentEspionages)) {
                 espionageIds.forEach((espionageId) => {
                     var doesExists = existentEspionages.filter((espionage) => espionage.pid == espionageId).length > 0
-                    if(doesExists) {
+                    if (doesExists) {
                         createCheckmark(espionageId)
                     } else {
                         createUpdateButton(espionageId)
@@ -244,7 +257,7 @@ export const setupEspionageUpdate = async function setupEspionageUpdate() {
                 })
             }
         },
-        fail: () => {}
+        fail: () => { }
     })
 }
 
