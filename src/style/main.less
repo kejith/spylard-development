@@ -1,6 +1,38 @@
 @background_color: yellow;
+@cell_border_color: #000;
+@cell_background: rgba(13, 16, 20, 0.95);
 
-.class {
-    background-color: @background_color;
-    z-index: 20;
+.flexparent {
+    display: flex;
+    flex-wrap: wrap; 
+}
+
+.flexparent > div {
+    border: 1px solid @cell_border_color;
+    background: @cell_background;
+    text-align: center;
+    vertical-align: middle;
+    flex: 1;
+}
+
+
+.tablehead {
+    background-image: url("https://pr0game.com/styles/theme/nova/img/bkd_title.png");
+    font-weight: 700;
+    border: 1px solid @cell_border_color;
+    height: 22px;
+    margin: 2px;
+    padding: 4px 6px 4px 6px;
+}
+
+.colonies-research {
+    min-width: 100px;
+    padding: 2px 3px; 
+    font-weight: 400;
+    margin: 0 2px 2px 0;
+    font-size: 12px;
+}
+
+.colonies-research .tech-name {
+    font-size: 11px;
 }
