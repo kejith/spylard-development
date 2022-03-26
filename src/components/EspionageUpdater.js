@@ -162,10 +162,11 @@ function parseEspionageHead(espionageReportQuery) {
     var readDate = (metaInfoString) => {
         var findDateRegExp = /(?<=] am ).*$/
         var matches = findDateRegExp.exec(metaInfoString)
-        var date = null
+        var date = new Date()
 
         if (matches) {
             date = new Date(matches[0])
+            return date.toISOString()
         }
 
         return date.toISOString()
