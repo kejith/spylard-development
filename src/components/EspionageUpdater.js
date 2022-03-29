@@ -2,7 +2,7 @@ import { loadEspionageInformation } from "../requests"
 import { baseurl } from "../config"
 
 function sendEspionage(data, id) {
-    console.log("=== sendEspionage()")
+    console.debug("=== sendEspionage()")
     console.debug(data)
 
     var updateBtn = $(`.message_${id} .espionage-update-button`)
@@ -15,7 +15,7 @@ function sendEspionage(data, id) {
         contentType: 'application/json',
         type: 'POST',
         success: (data, status, xhr) => {
-            console.log("Successfully send espionage report.")
+            console.debug("Successfully send espionage report.")
             $(updateBtn).prop('value', "UPDATED SUCCESSFULLY")
 
         },
@@ -41,9 +41,6 @@ function parseEspionageBody(id) {
         data[typeId] = parseInt($(value).parent().next().text().replace(".", ""))
         labels[typeId] = $(value).text()
     })
-
-    console.log(labels)
-
     return data
 }
 
@@ -177,7 +174,6 @@ function parseEspionageHead(espionageReportQuery) {
                     matches,
                     date
                 });
-                console.log(error);
                 date = new Date()
             } 
         }

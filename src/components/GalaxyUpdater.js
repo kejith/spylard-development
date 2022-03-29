@@ -29,6 +29,8 @@ function loadSystemInformation(galaxy, system) {
         }
     }
 
+    console.debug(parameters)
+
     var jqxhr = $.ajax(parameters)
 }
 
@@ -41,9 +43,9 @@ function removeDeleted(planets) {
         data: JSON.stringify(planets),
         contentType: 'application/json',
         success: (data, statusText) => {
-            console.log(statusText)
+            console.debug(statusText)
         },
-        error: (jqxhr, status, error) => { console.log(error) }
+        error: (jqxhr, status, error) => { console.error(error) }
     }
 
     console.log(planets)

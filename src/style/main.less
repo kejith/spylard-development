@@ -1,55 +1,75 @@
-@background_color: yellow;
+@background_color : yellow;
 @cell_border_color: #000;
-@cell_background: rgba(13, 16, 20, 0.95);
+@cell_background  : rgba(13, 16, 20, 0.95);
 
 .flexparent {
-    display: flex;
-    flex-wrap: wrap; 
+    display  : flex;
+    flex-wrap: wrap;
 }
 
-.flexparent > div {
-    border: 1px solid @cell_border_color;
-    background: @cell_background;
-    text-align: center;
+.flexparent>div {
+    border        : 1px solid @cell_border_color;
+    background    : @cell_background;
+    text-align    : center;
     vertical-align: middle;
-    flex: 1;
+    flex          : 1;
 }
 
 
 .tablehead {
     background-image: url("https://pr0game.com/styles/theme/nova/img/bkd_title.png");
-    font-weight: 700;
-    border: 1px solid @cell_border_color;
-    height: 22px;
-    margin: 2px;
-    padding: 4px 6px 4px 6px;
+    font-weight     : 700;
+    border          : 1px solid @cell_border_color;
+    height          : 22px;
+    margin          : 2px;
+    padding         : 4px 6px 4px 6px;
 }
 
-.colonies-research {
-    min-width: 100px;
-    padding: 2px 3px; 
+.colony-data {
+    font-size  : 11px;
+    min-width  : 90px;
+    padding    : 2px 3px;
     font-weight: 400;
-    margin: 0 2px 2px 0;
-    font-size: 12px;
+    margin     : 0 2px 2px 0;
+    font-size  : 12px;
 }
 
-.colonies-research .tech-name {
+.colony-data .element {
     font-size: 11px;
 }
 
-*, ::after, ::before {
+*,
+::after,
+::before {
     box-sizing: border-box;
 }
+
 .collapse {
-  display: block;
-  max-height: 0px;
-  overflow: hidden;
-  transition: max-height .5s cubic-bezier(0, 1, 0, 1);
+    display   : block;
+    max-height: 0px;
+    overflow  : hidden;
+    transition: max-height .5s cubic-bezier(0, 1, 0, 1);
 }
+
+tr.collapse {
+    display: table-row !important;
+}
+
 .collapse.show {
     max-height: 99em;
     transition: max-height .5s ease-in-out;
-  }
+}
 
- table.fixed { table-layout:fixed; }
- table.fixed td { overflow: hidden; }
+table.fixed {
+    table-layout: fixed;
+}
+
+table.fixed td {
+    overflow: hidden;
+}
+
+.colony-search-container {
+    grid-area   : 2 / 5 / auto / auto;
+    overflow-x  : hidden;
+    width       : 20vw;
+}
