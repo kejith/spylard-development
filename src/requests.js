@@ -1,8 +1,15 @@
 import { baseurl } from './config';
 
+export function onFailedRequest(jqxhr, textStatus, errorThrown) {
+    console.error({ jqxhr, textStatus, errorThrown })
+}
+
+export const Request = {
+}
+
 const defaultFns = {
     done: () => {},
-    fail: () => {},
+    fail: onFailedRequest,
     always: () => {}
 }
 
@@ -34,3 +41,4 @@ export function loadEspionageInformation(ids, fns) {
         error: fns.fail
     })
 }
+

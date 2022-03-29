@@ -1,19 +1,37 @@
 import { Keys } from '../const';
 import { AllianceReader, UserReader } from '../models/Models';
-import { getColoniesByAlliance, getColoniesByUser } from '../requests';
+import { getColoniesByAlliance, getColoniesByUser, Request } from '../requests';
 import { setupTriggers } from '../utils';
-
-const colonyResultContainer = "#colony-search-results-wrapper"
 
 export class ColonySearch {
     constructor(options) {
         this.appendTo = options.appendTo
         this.wrapperClasses = options.wrapperClasses
         this.wrapperId = options.wrapperId
+        this.colonyResultContainer = "#colony-search-results-wrapper"
     }
 
     clearResults() {
-        return $(colonyResultContainer).html("")
+        return $(this.colonyResultContainer).html("")
+    }
+
+    onAllianceUpdate(data) {
+        data.forEach((alliance) => {
+            alliance.users.forEach((user) => {
+                user.alliance = { id: alliance.id, name: alliance.name }
+            })
+        })
+
+        var alliances = AllianceReader.FromData(data)
+
+        this.clearResults()
+        this.outputAlliance(alliances)
+    }
+
+    onUserUpdate(data) {
+        var users = UserReader.FromData(data)
+        this.clearResults()
+        this.outputUsers(users)
     }
 
     onSubmit(event) {
@@ -22,35 +40,11 @@ export class ColonySearch {
         var searchInput = $("#search-colony-input-user").val()
         var shouldSearchForAlliance = $("#search-alliance-checkbox").is(":checked")
 
-        var allianceDone = (data) => {
-            data.forEach((alliance) => {
-                alliance.users.forEach((user) => {
-                    user.alliance = { id: alliance.id, name: alliance.name }
-                })
-            })
-
-            var alliances = AllianceReader.FromData(data)
-            this.clearResults()
-            this.outputAlliance(alliances)
-        }
-
         if (shouldSearchForAlliance) {
-            var alliances = getColoniesByAlliance(searchInput, {
-                done: allianceDone.bind(this),
-                fail: (jqxhr, textStatus, errorThrown) => { console.error({ jqxhr, textStatus, errorThrown }) }
-            })
+            var alliances = getColoniesByAlliance(searchInput, { done: this.onAllianceUpdate.bind(this) })
         } else {
-            var users = getColoniesByUser(searchInput, {
-                done: (data) => {
-                    var users = UserReader.FromData(data)
-                    this.clearResults()
-                    this.outputUsers(users)
-                },
-                fail: (jqxhr, textStatus, errorThrown) => { console.error({ jqxhr, textStatus, errorThrown }) }
-            })
+            var users = getColoniesByUser(searchInput, { done: this.onUserUpdate.bind(this) })
         }
-
-        return false;
     }
 
 
@@ -62,7 +56,7 @@ export class ColonySearch {
 
         alliances.forEach((alliance) => {
             var allianceContainerID = `#search-colonies-alliance-${alliance.id}`
-            $(colonyResultContainer).append(`
+            $(this.colonyResultContainer).append(`
                 <div id="${allianceContainerID.replace('#', '')}"><h3>${alliance.name}</h3></div>
             `)
             this.outputUsers(alliance.members, $(allianceContainerID))
@@ -71,7 +65,7 @@ export class ColonySearch {
         setupTriggers()
     }
 
-    outputUsers(users, bindTo = colonyResultContainer) {
+    outputUsers(users, bindTo = this.colonyResultContainer) {
         if (users == null && !Array.isArray(users)) {
             console.error({
                 error: "users null should contain array",
@@ -87,10 +81,10 @@ export class ColonySearch {
         setupTriggers()
     }
 
-    outputPlanets(user, bindTo = colonyResultContainer) {
+    outputPlanets(user, bindTo = this.colonyResultContainer) {
         var idTableUserColonies = `colonies-${user.id}`
         var researchContainerId = `colony-research-${user.id}`
-        var researchTableHtml = this.createCategoryTableHtml(researchContainerId, "techs", user.data.techs)
+        var researchTableHtml = CategoryTable.getHtml(researchContainerId, "techs", user.data.techs)
 
         $(bindTo).append(/*html*/`
         <div style="text-align: center;">
@@ -144,37 +138,7 @@ export class ColonySearch {
         })
     }
 
-    createCategoryTableHtml(containerId, category, data) {
-        var innerHTML = this.createCategoryTableElementsHTML(category, data)
 
-        return /*html*/`
-            <div class="tablehead">
-                <span data-toggle="collapse" data-target="#${containerId}">
-                    ${Keys[category].de.name}
-                </span>      
-            </div>   
-            <div id="${containerId}" class="collapse">
-                <div class="flexparent">
-                    ${innerHTML}
-                </div>
-            </div>`
-    }
-
-    createCategoryTableElementsHTML(category, data) {
-        var elementsHtml = ``
-        Object.keys(data).forEach((element) => {
-            if (Keys[category][element] !== undefined) {
-                elementsHtml += /*html*/`
-                <div class="cell colony-data colony-${category}">
-                    <span class="element element-name">${Keys[category][element].de.abbr}</span><br>
-                    <span class="element element-level">${data[element].toLocaleString()}</span>
-                </div>           
-                `
-            }
-        })
-
-        return elementsHtml
-    }
 
     outputPlanetData(planet) {
         var data = planet.getData()
@@ -183,7 +147,7 @@ export class ColonySearch {
         var dataCategoryHtml = ``
         Object.keys(data).forEach(category => {
             var containerId = `colony-${category}-${galaxy}-${system}-${position}`
-            dataCategoryHtml += this.createCategoryTableHtml(containerId, category, data[category])
+            dataCategoryHtml += CategoryTable.getHtml(containerId, category, data[category])
         })
 
         return /*html*/`
@@ -228,6 +192,38 @@ export class ColonySearch {
         var searchColoniesForm = document.getElementById("search-colonies")
         searchColoniesForm.addEventListener("submit", this.onSubmit.bind(this), true);
     }
+}
 
+class CategoryTable {
+    static getHtml(containerId, category, data) {
+        var innerHTML = this.getElements(category, data)
 
+        return /*html*/`
+            <div class="tablehead">
+                <span data-toggle="collapse" data-target="#${containerId}">
+                    ${Keys[category].de.name}
+                </span>      
+            </div>   
+            <div id="${containerId}" class="collapse">
+                <div class="flexparent">
+                    ${innerHTML}
+                </div>
+            </div>`
+    }
+
+    static getElements(category, data) {
+        var elementsHtml = ``
+        Object.keys(data).forEach((element) => {
+            if (Keys[category][element] !== undefined) {
+                elementsHtml += /*html*/`
+                <div class="cell colony-data colony-${category}">
+                    <span class="element element-name">${Keys[category][element].de.abbr}</span><br>
+                    <span class="element element-level">${data[element].toLocaleString()}</span>
+                </div>           
+                `
+            }
+        })
+
+        return elementsHtml
+    }
 }
