@@ -5,15 +5,22 @@ import './style/main.less';
 import { addGlobalStyle, isPage, setupTriggers } from './utils';
 import { setupPlayerCardUpdate } from './components/PlayercardUpdater';
 import { parseFleetsFromOverview } from './components/FleetParser';
+import { ColonySearch } from './components/ColonySearch';
 
 (function () {
     'use strict';
 
     setupTriggers()
 
+    var colonySearch = new ColonySearch({
+        appendTo: 'body > div.wrapper',
+        wrapperClasses: 'no-mobile colony-search-container',
+        wrapperId: ''
+    })
+
     // general functions
     if (!isPage("playerCard"))
-        createPlanetSearchContainer()
+        colonySearch.init()
 
     // ======== OVERVIEW
     if (isPage("overview")) {
