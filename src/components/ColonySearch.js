@@ -11,10 +11,58 @@ export class ColonySearch {
         this.colonyResultContainer = "#colony-search-results-wrapper"
     }
 
+    init() {
+        $(`${this.appendTo}`).append(/*html*/`
+            <div id="${this.wrapperId}" class="${this.wrapperClasses}">
+                <div id="colony-search-wrapper">
+                    <form id="search-colonies">
+                        <table >
+                            <tr><th style="text-align: center">Spieler suche</th></tr>
+                            <tr><td style="text-align: center"><input id="search-colony-input-user" type="text"></td></tr>
+                            <tr>
+                                <td style="text-align: center">
+                                    <span>Allianz suchen</span>
+                                    <input style="vertical-align: middle;"  id="search-alliance-checkbox" type="checkbox">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center">
+                                    <input id="search-colony-btn" type="submit" value="Suchen">
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+                <div id="colony-search-results-wrapper">
+                    <table>
+                    </table>
+                </div>
+            </div>
+        `)
+
+        $('#search-colonies').on('submit', function (e) {
+            e.preventDefault();
+        });
+
+        var searchColoniesForm = document.getElementById("search-colonies")
+        searchColoniesForm.addEventListener("submit", this.onSubmit.bind(this), true);
+    }    
+
+    /**
+     * Clearing the Results List of the ColonySearch
+     * @date 2022-03-30
+     * @returns {void}
+     */
     clearResults() {
-        return $(this.colonyResultContainer).html("")
+        $(this.colonyResultContainer).html("")
     }
 
+    /**
+     * Alliance-Request Callback
+     * @date 2022-03-30
+     * @param {object} data
+     * @returns {any}
+     */
     onAllianceUpdate(data) {
         data.forEach((alliance) => {
             alliance.users.forEach((user) => {
@@ -28,12 +76,20 @@ export class ColonySearch {
         this.outputAlliance(alliances)
     }
 
+    /**
+     * User-Request Callback
+     * @param {object} data 
+     */
     onUserUpdate(data) {
         var users = UserReader.FromData(data)
         this.clearResults()
         this.outputUsers(users)
     }
 
+    /**
+     * Form submission Callback
+     * @param {object} event 
+     */
     onSubmit(event) {
         event.preventDefault();
 
@@ -48,6 +104,12 @@ export class ColonySearch {
     }
 
 
+    /**
+     * Alliance-data will be used to output Results
+     * @date 2022-03-30
+     * @param {Alliance[]} alliances
+     * @returns {void}
+     */
     outputAlliance(alliances) {
         if (alliances === null && !Array.isArray(alliances)) {
             console.error({ error: "alliances null should contain array", where: "outPutAllianceColonies()" })
@@ -65,6 +127,13 @@ export class ColonySearch {
         setupTriggers()
     }
 
+    /**
+     * User data will be used to output Results
+     * @date 2022-03-30
+     * @param {Users[]} users
+     * @param {string} bindTo=this.colonyResultContainer
+     * @returns {void}
+     */
     outputUsers(users, bindTo = this.colonyResultContainer) {
         if (users == null && !Array.isArray(users)) {
             console.error({
@@ -75,13 +144,21 @@ export class ColonySearch {
         }
 
         users.forEach((user) => {
-            this.outputPlanets(user, bindTo)
+            this.outputUser(user, bindTo)
         })
 
         setupTriggers()
     }
 
-    outputPlanets(user, bindTo = this.colonyResultContainer) {
+    /**
+     * User data will be used to create a table of colonies which is binded to the corresponding
+     * user result container or a specified one
+     * @date 2022-03-30
+     * @param {User} user
+     * @param {string} bindTo=this.colonyResultContainer
+     * @returns {any}
+     */
+    outputUser(user, bindTo = this.colonyResultContainer) {
         var idTableUserColonies = `colonies-${user.id}`
         var researchContainerId = `colony-research-${user.id}`
         var researchTableHtml = CategoryTable.getHtml(researchContainerId, "techs", user.data.techs)
@@ -130,7 +207,7 @@ export class ColonySearch {
                 <tr>
                     <td colspan="2">
                         <div class="collapse" id="${dataContainerId}">
-                            ${this.outputPlanetData(planet)}
+                            ${this.getPlanetDataHtml(planet)}
                         </div>
                     </td>
                 </tr>
@@ -140,7 +217,13 @@ export class ColonySearch {
 
 
 
-    outputPlanetData(planet) {
+    /**
+     * Planet data is used to create a multiple Tables for every category of data a Planet has
+     * @date 2022-03-30
+     * @param {Planet} planet
+     * @returns {string} - HTML String
+     */
+    getPlanetDataHtml(planet) {
         var data = planet.getData()
         const { galaxy, system, position } = planet.coords
 
@@ -154,43 +237,6 @@ export class ColonySearch {
             <div>
                 ${dataCategoryHtml}
             </div>`
-    }
-
-    init() {
-        $(`${this.appendTo}`).append(/*html*/`
-            <div id="${this.wrapperId}" class="${this.wrapperClasses}">
-                <div id="colony-search-wrapper">
-                    <form id="search-colonies">
-                        <table >
-                            <tr><th style="text-align: center">Spieler suche</th></tr>
-                            <tr><td style="text-align: center"><input id="search-colony-input-user" type="text"></td></tr>
-                            <tr>
-                                <td style="text-align: center">
-                                    <span>Allianz suchen</span>
-                                    <input style="vertical-align: middle;"  id="search-alliance-checkbox" type="checkbox">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="text-align: center">
-                                    <input id="search-colony-btn" type="submit" value="Suchen">
-                                </td>
-                            </tr>
-                        </table>
-                    </form>
-                </div>
-                <div id="colony-search-results-wrapper">
-                    <table>
-                    </table>
-                </div>
-            </div>
-        `)
-
-        $('#search-colonies').on('submit', function (e) {
-            e.preventDefault();
-        });
-
-        var searchColoniesForm = document.getElementById("search-colonies")
-        searchColoniesForm.addEventListener("submit", this.onSubmit.bind(this), true);
     }
 }
 
