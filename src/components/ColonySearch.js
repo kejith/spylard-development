@@ -229,7 +229,7 @@ export class ColonySearch {
                         </a>
                     </td>
                     <td>
-                        <span class="cursor-pointer" data-toggle="collapse" data-target="#${dataContainerId}">
+                        <span  data-toggle="collapse" data-target="#${dataContainerId}">
                             ${planet.name}</td>
                         </span>
                 </tr>
@@ -275,7 +275,7 @@ class CategoryTable {
 
         return /*html*/`
             <div class="tablehead">
-                <span class="cursor-pointer" data-toggle="collapse" data-target="#${containerId}">
+                <span data-toggle="collapse" data-target="#${containerId}">
                     ${Keys[category].de.name}
                 </span>      
             </div>   
