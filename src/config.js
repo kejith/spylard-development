@@ -1,1 +1,1 @@
-export const baseurl = "http://localhost"
+export const baseurl = "https://kejith.de"
