@@ -14,6 +14,7 @@ module.exports = {
     `https://cdn.jsdelivr.net/npm/jquery@${dependencies.jquery}/dist/jquery.min.js`,
   ],
   grant: ['GM.xmlHttpRequest', 'GM_setValue', 'GM_getValue'],
+  icon64: "https://kejith.de/images/spylard.png",
   // connect: [
   //   'httpbin.org'
   // ],
