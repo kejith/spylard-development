@@ -1,7 +1,12 @@
 import { Keys } from '../const';
-import { AllianceReader, UserReader } from '../models/Models';
+import { AllianceReader, User, UserReader } from '../models/Models';
 import { getColoniesByAlliance, getColoniesByUser, Request } from '../requests';
 import { setupTriggers } from '../utils';
+
+class Actions {
+    static GetUsers = "getUsers"
+    static GetAlliances = "getAlliances"
+}
 
 export class ColonySearch {
     constructor(options) {
@@ -9,6 +14,28 @@ export class ColonySearch {
         this.wrapperClasses = options.wrapperClasses
         this.wrapperId = options.wrapperId
         this.colonyResultContainer = "#colony-search-results-wrapper"
+
+    }
+
+    setState(state) {
+        this.state = { ...this.state, ...state }
+        GM_setValue("colony-search-state", JSON.stringify(this.state))
+        this.render()
+    }
+
+    render() {
+        //console.log(this.state)
+        this.clearResults()
+
+
+        if (this.state.action == Actions.GetUsers) {
+            var users = UserReader.fromData(this.state.data)       
+            this.outputUsers(users)
+        }
+        if (this.state.action == Actions.GetAlliances) {
+            var alliances = AllianceReader.fromData(this.state.data)
+            this.outputAlliance(alliances)
+        }
     }
 
     init() {
@@ -46,7 +73,14 @@ export class ColonySearch {
 
         var searchColoniesForm = document.getElementById("search-colonies")
         searchColoniesForm.addEventListener("submit", this.onSubmit.bind(this), true);
-    }    
+
+        var savedState = GM_getValue("colony-search-state", "{}")
+
+        console.log(savedState)
+
+        if (savedState)
+            this.setState(JSON.parse(savedState))
+    }
 
     /**
      * Clearing the Results List of the ColonySearch
@@ -69,11 +103,7 @@ export class ColonySearch {
                 user.alliance = { id: alliance.id, name: alliance.name }
             })
         })
-
-        var alliances = AllianceReader.FromData(data)
-
-        this.clearResults()
-        this.outputAlliance(alliances)
+        this.setState({ data, action: Actions.GetAlliances })
     }
 
     /**
@@ -81,9 +111,7 @@ export class ColonySearch {
      * @param {object} data 
      */
     onUserUpdate(data) {
-        var users = UserReader.FromData(data)
-        this.clearResults()
-        this.outputUsers(users)
+        this.setState({ data, action: Actions.GetUsers })
     }
 
     /**
@@ -189,6 +217,7 @@ export class ColonySearch {
 
         user.planets.forEach((planet) => {
 
+            //console.log(planet)
             var dataContainerId = `colony-data-${planet.coords.galaxy}-${planet.coords.system}-${planet.coords.position}`
             var fleetContainerId = `colony-fleet-${planet.coords.galaxy}-${planet.coords.system}-${planet.coords.position}`
 

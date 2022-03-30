@@ -1,5 +1,6 @@
 import { Keys } from "../const"
 
+
 class Component {
     constructor(data = null, categoriesNeeded = null) {
         this.data = {}
@@ -67,6 +68,8 @@ export class Planet extends Component {
             "structures",
         ])
 
+        if(data === null) return
+
         this.espionages = []
         this.coords = {
             galaxy: data.galaxy,
@@ -76,7 +79,6 @@ export class Planet extends Component {
 
         this.name = data.name
     }
-
 
     addEspionage(espionage) {
         this.espionages.push(espionage)
@@ -130,13 +132,13 @@ export class Alliance extends Component {
 }
 
 export class AllianceReader {
-    static FromData(data) {
+    static fromData(data) {
         var alliances = []
         if (Array.isArray(data)) {
             // alliance loop
             data.forEach(allianceData => {
                 var alliance = new Alliance(allianceData)
-                var users = UserReader.FromData(allianceData.users)
+                var users = UserReader.fromData(allianceData.users)
 
                 users.forEach(user => {
                     alliance.addMember(user)
@@ -151,7 +153,7 @@ export class AllianceReader {
 }
 
 export class UserReader {
-    static FromData(data){
+    static fromData(data){
         if(Array.isArray(data)){
             var users = []
             data.forEach(userData => {

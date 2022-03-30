@@ -31,7 +31,6 @@ export function parseFleetsFromOverview() {
         var tooltipElement = $(tooltipHTML)
         var tds = tooltipElement.find("td")
         var ressources = parseLabelValuePairFromToolip(tds, ["Metall", "Kristall", "Deuterium"])
-        console.log(ressources)
     })
 
     fleetTooltips.each((id, tooltip) => {
@@ -39,6 +38,5 @@ export function parseFleetsFromOverview() {
         var tooltipElement = $(tooltipHTML)
         var tds = tooltipElement.find("td")
         var fleet = parseLabelValuePairFromToolip(tds)
-        console.log(fleet)
     })
 }
