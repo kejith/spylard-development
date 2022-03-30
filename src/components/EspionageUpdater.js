@@ -66,7 +66,7 @@ function makeReport(data) {
         recycler: data[209],
         espionageProbe: data[210],
         bomber: data[211],
-        satalites: data[212],
+        satellites: data[212],
         destroyer: data[213],
         deathstar: data[214],
         battlecruiser: data[215]

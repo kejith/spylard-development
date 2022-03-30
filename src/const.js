@@ -63,7 +63,7 @@ export const Keys = {
                 name: "Bomber",
             }
         },
-        satalites: {
+        satellites: {
             de: {
                 abbr: "Sat",
                 name: "Solarsatellit",
@@ -405,3 +405,258 @@ export const Keys = {
     }
 }
 
+export const Data = {
+    fleet: {
+        smallCargo: {
+            metal: 2000,
+            crystal: 2000,
+            deuterium: 0,
+            factor: 1.0,
+        },
+        largeCargo: {
+            metal: 6000,
+            crystal: 6000,
+            deuterium: 0,
+            factor: 1.0,
+        },
+        lightFighter: {
+            metal: 3000,
+            crystal: 1000,
+            deuterium: 0,
+            factor: 1.0,
+        },
+        heavyFighter: {
+            metal: 6000,
+            crystal: 4000,
+            deuterium: 0,
+            factor: 1.0,
+        },
+        cruiser: {
+            metal: 20000,
+            crystal: 7000,
+            deuterium: 2000,
+            factor: 1.0,
+        },
+        battleship: {
+            metal: 45000,
+            crystal: 15000,
+            deuterium: 0,
+            factor: 1.0,
+        },
+        colonyShio: {
+            metal: 10000,
+            crystal: 20000,
+            deuterium: 10000,
+            factor: 1.0,
+        },
+        recycler: {
+            metal: 10000,
+            crystal: 6000,
+            deuterium: 2000,
+            factor: 1.0,
+        },
+        espionageProbe: {
+            metal: 0,
+            crystal: 1000,
+            deuterium: 0,
+            factor: 1.0,
+        },
+        bomber: {
+            metal: 50000,
+            crystal: 25000,
+            deuterium: 10000,
+            factor: 1.0,
+        },
+        satellites: {
+            metal: 0,
+            crystal: 2000,
+            deuterium: 500,
+            factor: 1.0,
+        },
+        destroyer: {
+            metal: 60000,
+            crystal: 50000,
+            deuterium: 15000,
+            factor: 1.0,
+        },
+        deathstar: {
+            metal: 5000000,
+            crystal: 4000000,
+            deuterium: 1000000,
+            factor: 1.0,
+        },
+        battlecruiser: {
+            metal: 30000,
+            crystal: 40000,
+            deuterium: 15000,
+            factor: 1.0,
+        },
+    },
+    defense: {
+        // defensive
+        rocketLauncher: {
+            metal: 2000,
+            crystal: 0,
+            deuterium: 0,
+            factor: 1.0,
+        },
+        lightLaser: {
+            metal: 1500,
+            crystal: 500,
+            deuterium: 0,
+            factor: 1.0,
+        },
+        heavyLaser: {
+            metal: 6000,
+            crystal: 2000,
+            deuterium: 0,
+            factor: 1.0,
+        },
+        gaussCanon: {
+            metal: 20000,
+            crystal: 15000,
+            deuterium: 2000,
+            factor: 1.0,
+        },
+        ionCanon: {
+            metal: 2000,
+            crystal: 6000,
+            deuterium: 0,
+            factor: 1.0,
+        },
+        plasmaCanon: {
+            metal: 50000,
+            crystal: 50000,
+            deuterium: 30000,
+            factor: 1.0,
+        },
+        smallShield: {
+            metal: 10000,
+            crystal: 10000,
+            deuterium: 0,
+            factor: 1.0,
+        },
+        largeShield: {
+            metal: 50000,
+            crystal: 50000,
+            deuterium: 0,
+            factor: 1.0,
+        },
+        antiBalisticMissile: {
+            metal: 8000,
+            crystal: 0,
+            deuterium: 2000,
+            factor: 1.0,
+        },
+        interplanetaryMissile: {
+            metal: 12500,
+            crystal: 2500,
+            deuterium: 10000,
+            factor: 1.0,
+        },
+    },
+    structures: {
+        metalMine: {
+            metal: 60,
+            crystal: 15,
+            deuterium: 0,
+            factor: 1.5,
+        },
+        crystalMine: {
+            metal: 48,
+            crystal: 24,
+            deuterium: 0,
+            factor: 1.6,
+        },
+        deuteriumSynthesizer: {
+            metal: 225,
+            crystal: 75,
+            deuterium: 0,
+            factor: 1.5,
+        },
+        solarPlant: {
+            metal: 75,
+            crystal: 30,
+            deuterium: 0,
+            factor: 1.5,
+        },
+        fusionPlant: {
+            metal: 900,
+            crystal: 360,
+            deuterium: 180,
+            factor: 1.8,
+        },
+        roboticsFactory: {
+            metal: 400,
+            crystal: 120,
+            deuterium: 200,
+            factor: 2.0,
+        },
+        naniteFactory: {
+            metal: 1000000,
+            crystal: 500000,
+            deuterium: 100000,
+            factor: 2.0,
+        },
+        shipyard: {
+            metal: 400,
+            crystal: 200,
+            deuterium: 100,
+            factor: 2.0,
+        },
+        metalStorge: {
+            metal: 2000,
+            crystal: 0,
+            deuterium: 0,
+            factor: 2.0,
+        },
+        crystalStorage: {
+            metal: 2000,
+            crystal: 1000,
+            deuterium: 0,
+            factor: 2.0,
+        },
+        deteriumTank: {
+            metal: 2000,
+            crystal: 2000,
+            deuterium: 0,
+            factor: 2.0,
+        },
+        researchLab: {
+            metal: 200,
+            crystal: 400,
+            deuterium: 200,
+            factor: 2.0,
+        },
+        terraformer: {
+            metal: 0,
+            crystal: 50000,
+            deuterium: 100000,
+            factor: 2.0,
+        },
+        allianceDepot: {
+            metal: 20000,
+            crystal: 40000,
+            deuterium: 0,
+            factor: 2.0,
+        },
+        sensorPhalanx: {
+            metal: 20000,
+            crystal: 40000,
+            deuterium: 20000,
+            factor: 2.0,
+        },
+        jumpGate: {
+            metal: 2000000,
+            crystal: 4000000,
+            deuterium: 2000000,
+            factor: 2.0,
+        },
+        missileSilo: {
+            metal: 20000,
+            crystal: 20000,
+            deuterium: 1000,
+            factor: 2.0,
+        },
+    }
+}

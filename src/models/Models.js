@@ -1,4 +1,4 @@
-import { Keys } from "../const"
+import { Keys, Data } from "../const"
 
 
 class Component {
@@ -83,6 +83,96 @@ export class Planet extends Component {
     addEspionage(espionage) {
         this.espionages.push(espionage)
         return this
+    }
+
+    getFleet() {
+        var fleet = new Fleet()
+        fleet.setData(this.data.fleet)
+        return fleet
+    }
+
+    getDefense() {
+        var defense = new Defense()
+        defense.setData(this.data.defense)
+        return defense
+    }
+
+    getStructures() {
+        var structures = new Structures()
+        structures.setData(this.data.structures)
+        return structures
+    }
+}
+
+
+export class UnitCollection {
+    constructor() {
+        this.data = {}
+        this.category = ""
+    }
+
+    setData(data) {
+        this.data = data
+    }
+
+    value() {
+        var amount = 0
+        Object.keys(this.data).forEach(element => {
+            const {metal, crystal, deuterium} = Data[this.category][element]
+            amount += (metal + crystal + deuterium) * this.getUnitAmount(element)
+        })
+        
+        return amount
+    }
+
+    getUnitAmount(unit) {
+        if(!this.data[unit])
+            return 0
+        
+        return this.data[unit]
+    }
+}
+
+export class Fleet extends UnitCollection {
+    constructor() {
+        super()
+        this.category = "fleet"
+    }
+}
+
+export class Defense extends UnitCollection {
+    constructor() {
+        super()
+        this.category = "defense"
+    }
+}
+
+export class Structures extends UnitCollection {
+    constructor() {
+        super()
+        this.category = "structures"
+    }
+
+    value() {
+        var amount = 0
+
+        Object.keys(this.data).forEach(structure => {
+            var level = this.data[structure]
+            var factor = Data[this.category][structure].factor
+            var structureAmount = 0
+            for (let i = 0; i < level; i++) {             
+                var metal = Math.floor(Data[this.category][structure].metal * (factor**(i)))
+                var crystal = Math.floor(Data[this.category][structure].crystal * (factor**(i)))
+                var deuterium = Math.floor(Data[this.category][structure].deuterium * (factor**(i)))
+                
+                structureAmount = metal + crystal + deuterium
+            }
+
+            console.log({structure, level, structureAmount, data:Data[this.category][structure]})
+            amount += structureAmount
+        })
+
+        return Math.floor(amount)
     }
 }
 

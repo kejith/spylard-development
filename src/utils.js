@@ -151,3 +151,16 @@ export function setupTriggers() {
         }
     }, false);
 }
+
+export function loadExternalJavascript(url) {
+    $.ajax({
+        type: "GET",
+        url: url,
+        dataType: "script",
+        async: false
+      });
+}
+
+export const utils = {
+    loadExternalJavascript,
+}

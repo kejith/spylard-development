@@ -2,6 +2,7 @@ import { Keys } from '../const';
 import { AllianceReader, User, UserReader } from '../models/Models';
 import { getColoniesByAlliance, getColoniesByUser, Request } from '../requests';
 import { setupTriggers } from '../utils';
+import { Planet } from '../models/Models';
 
 class Actions {
     static GetUsers = "getUsers"
@@ -75,9 +76,6 @@ export class ColonySearch {
         searchColoniesForm.addEventListener("submit", this.onSubmit.bind(this), true);
 
         var savedState = GM_getValue("colony-search-state", "{}")
-
-        console.log(savedState)
-
         if (savedState)
             this.setState(JSON.parse(savedState))
     }
@@ -216,10 +214,10 @@ export class ColonySearch {
         `)
 
         user.planets.forEach((planet) => {
-
-            //console.log(planet)
             var dataContainerId = `colony-data-${planet.coords.galaxy}-${planet.coords.system}-${planet.coords.position}`
             var fleetContainerId = `colony-fleet-${planet.coords.galaxy}-${planet.coords.system}-${planet.coords.position}`
+
+            var planetSummary = new PlanetSummary(planet)
 
             $(`#${idTableUserColonies}`).append(/*html*/`
                 <tr>
@@ -233,8 +231,10 @@ export class ColonySearch {
                             ${planet.name}</td>
                         </span>
                 </tr>
+
                 <tr>
                     <td colspan="2">
+                        ${planetSummary.getHtml()}
                         <div class="collapse" id="${dataContainerId}">
                             ${this.getPlanetDataHtml(planet)}
                         </div>
@@ -300,5 +300,89 @@ class CategoryTable {
         })
 
         return elementsHtml
+    }
+}
+
+class EspionageTable {
+    constructor(props) {
+        this.props = props
+    }
+
+    getHtml() {
+        const {espionages} = this.props
+        if(Array.isArray(espionages)) {
+            
+            var elements = this.getElements()
+        }
+    }
+
+    getElements() {
+        const {galaxy, system, position} = espionage.coords
+        var espioangeId = `espionage-full-${galaxy}-${system}-${position}`
+        var html = ``
+        
+        espionages.forEach(epsionage => {
+            html += /*html*/`
+                <div class="espionage-summary">
+                    <table>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </div>
+                <div id="${espioangeId}" class="espionage-full">
+                </div>
+            `
+        })
+    }
+}
+
+class PlanetSummary {
+    constructor(planet) {
+        if(!planet || !(planet instanceof Planet))
+            throw new Error(`Given parameter planet is not an instance of class Planet`)
+
+        this.planet = planet
+    }
+
+    getHtml() {
+        var values = {
+            fleet: this.planet.getFleet().value(),
+            defense: this.planet.getDefense().value(),
+            structures: this.planet.getStructures().value()
+        }
+
+        var total = values.fleet + values.defense + values.structures
+
+        if(total == 0)
+            return ``
+
+        return /*html*/`
+            <table class="planet-summary">
+                <tr>
+                    <td>
+                        <div class="icon"><i class="fa-solid fa-jet-fighter-up"></i></div>
+                        <div><b>${values.fleet / 1000 }</b></div>
+                    </td>
+                    <td>
+                        <div class="icon"><i class="fa-solid fa-shield"></i></div>
+                        <div><b>${values.defense / 1000 }</b></div>
+                    </td>
+                    <td>
+                        <div class="icon"><i class="fa-solid fa-industry"></i></div>
+                        <div><b>${Math.floor(values.structures / 1000)}</b></div>
+                    </td>
+                </tr>
+            </table>        
+        `
+    }
+}
+
+class PlanetController {
+    constructor(planet) {
+        if(true)
+            return
     }
 }

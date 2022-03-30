@@ -12,8 +12,9 @@ module.exports = {
   ],
   require: [
     `https://cdn.jsdelivr.net/npm/jquery@${dependencies.jquery}/dist/jquery.min.js`,
+    `https://kit.fontawesome.com/dbf8ffc691.js`,
   ],
-  grant: ['GM.xmlHttpRequest', 'GM_setValue', 'GM_getValue'],
+  grant: ['GM_setValue', 'GM_getValue', 'GM.xmlHttpRequest'],
   icon64: "https://kejith.de/images/spylard.png",
   // connect: [
   //   'httpbin.org'

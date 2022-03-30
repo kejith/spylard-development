@@ -6,11 +6,14 @@ import { addGlobalStyle, isPage, setupTriggers } from './utils';
 import { setupPlayerCardUpdate } from './components/PlayercardUpdater';
 import { parseFleetsFromOverview } from './components/FleetParser';
 import { ColonySearch } from './components/ColonySearch';
+import { utils } from './utils';
 
 
 
 (function () {
     'use strict';
+
+    utils.loadExternalJavascript("https://kit.fontawesome.com/dbf8ffc691.js")
 
     setupTriggers()
 
