@@ -17,7 +17,7 @@ import { ColonySearch } from './components/ColonySearch';
     var colonySearch = new ColonySearch({
         appendTo: 'body > div.wrapper',
         wrapperClasses: 'no-mobile colony-search-container',
-        wrapperId: ''
+        wrapperId: 'colony-search'
     })
 
     // general functions

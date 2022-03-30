@@ -40,29 +40,34 @@ export class ColonySearch {
 
     init() {
         $(`${this.appendTo}`).append(/*html*/`
-            <div id="${this.wrapperId}" class="${this.wrapperClasses}">
-                <div id="colony-search-wrapper">
-                    <form id="search-colonies">
-                        <table >
-                            <tr><th style="text-align: center">Spieler suche</th></tr>
-                            <tr><td style="text-align: center"><input id="search-colony-input-user" type="text"></td></tr>
-                            <tr>
-                                <td style="text-align: center">
-                                    <span>Allianz suchen</span>
-                                    <input style="vertical-align: middle;"  id="search-alliance-checkbox" type="checkbox">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="text-align: center">
-                                    <input id="search-colony-btn" type="submit" value="Suchen">
-                                </td>
-                            </tr>
-                        </table>
-                    </form>
+            <div>
+                <div class="colony-search-hide-container">
+                    <a href="#" class="colony-search-hide" data-toggle="collapse" data-target="#${this.wrapperId}">Auf-/Zuklappen</a>
                 </div>
-                <div id="colony-search-results-wrapper">
-                    <table>
-                    </table>
+                <div id="${this.wrapperId}" class="show collapse ${this.wrapperClasses}">
+                    <div class="collapse show" id="colony-search-wrapper">
+                        <form id="search-colonies">
+                            <table >
+                                <tr><th style="text-align: center">Spieler suche</th></tr>
+                                <tr><td style="text-align: center"><input id="search-colony-input-user" type="text"></td></tr>
+                                <tr>
+                                    <td style="text-align: center">
+                                        <span>Allianz suchen</span>
+                                        <input style="vertical-align: middle;"  id="search-alliance-checkbox" type="checkbox">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center">
+                                        <input id="search-colony-btn" type="submit" value="Suchen">
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                    </div>
+                    <div id="colony-search-results-wrapper">
+                        <table>
+                        </table>
+                    </div>
                 </div>
             </div>
         `)
