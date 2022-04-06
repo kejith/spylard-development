@@ -18,7 +18,8 @@
   },
   "private": true,
   "dependencies": {
-    "jquery": "3.6.0"
+    "jquery": "3.6.0",
+    "toastify-js": "^1.11.2"
   },
   "devDependencies": {
     "@babel/core": "7.17.8",
