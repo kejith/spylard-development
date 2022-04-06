@@ -1,12 +1,16 @@
 import { Keys } from '../const';
 import { AllianceReader, User, UserReader } from '../models/Models';
-import { getColoniesByAlliance, getColoniesByUser, Request } from '../requests';
+import { getColoniesByAlliance, getColoniesByUser, Requests } from '../requests';
 import { setupTriggers } from '../utils';
 import { Planet } from '../models/Models';
+import { isPage } from '../utils';
+import { removeNewlinesAndTabs } from '../utils';
 
 class Actions {
     static GetUsers = "getUsers"
     static GetAlliances = "getAlliances"
+    static GetMoons = "getMoons"
+    static GetInactives = "getInactives"
 }
 
 export class ColonySearch {
@@ -25,45 +29,98 @@ export class ColonySearch {
     }
 
     render() {
-        //console.log(this.state)
         this.clearResults()
 
 
         if (this.state.action == Actions.GetUsers) {
-            var users = UserReader.fromData(this.state.data)       
+            var users = UserReader.fromData(this.state.data)
             this.outputUsers(users)
         }
         if (this.state.action == Actions.GetAlliances) {
             var alliances = AllianceReader.fromData(this.state.data)
             this.outputAlliance(alliances)
         }
+        if (this.state.action == Actions.GetMoons) {
+            this.outputMoons(this.state.data)
+        }
     }
 
     init() {
-        $(`${this.appendTo}`).append(/*html*/`
+        if(isPage("galaxy")) {
+            $(`.table569`).find(`tr`).each((index, value) => {
+                var username = removeNewlinesAndTabs($(value).find("td").eq(5).text())
+                if(username !== ''){
+                    // remove activity details from username string
+                    const regExp = /\(([^)]+)\)/;                    
+                    var matches = regExp.exec(username);
+                    if (matches) {
+                        username = username.replace(matches[0], "")
+                    }
+
+                    $(value).append(/*html*/`
+                        <td>
+                            <a href="#" id="search-from-galaxy-${index}" data-value="${username}"  >
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </a>
+                        </td>
+                    `)
+                    
+
+                    $(`#search-from-galaxy-${index}`).bind("click", { username }, (event) => {
+                        $("#search-colony-input-user").attr("value", event.data.username)
+                        $("#player-search").prop("checked", true)
+                        this.onSubmit()
+                    })
+                    
+
+                }
+            })
+        }
+
+        $(this.appendTo).append(/*html*/`
             <div id="${this.wrapperId}" class="${this.wrapperClasses}">
-                <div id="colony-search-wrapper">
-                    <form id="search-colonies">
-                        <table >
-                            <tr><th style="text-align: center">Spieler suche</th></tr>
-                            <tr><td style="text-align: center"><input id="search-colony-input-user" type="text"></td></tr>
-                            <tr>
-                                <td style="text-align: center">
-                                    <span>Allianz suchen</span>
-                                    <input style="vertical-align: middle;"  id="search-alliance-checkbox" type="checkbox">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="text-align: center">
-                                    <input id="search-colony-btn" type="submit" value="Suchen">
-                                </td>
-                            </tr>
-                        </table>
-                    </form>
+                <div  style="text-align: right">                        
+                    <span  data-toggle="collapse" data-target="#colony-search-collapse-wrapper">
+                        Suche auf-/zuklappen
+                    </span>
                 </div>
-                <div id="colony-search-results-wrapper">
-                    <table>
-                    </table>
+                <div id="colony-search-collapse-wrapper" class="collapse show">
+                    <div id="colony-search-wrapper">
+                        <form id="search-colonies">
+                            <table >
+                                <tr><th style="text-align: center">Suche</th></tr>
+                                <tr><td style="text-align: center"><input id="search-colony-input-user" type="text"></td></tr>
+                                <tr><td><span class="search-type-label">Nach was soll gesucht werden?</span></td></tr>
+                                <tr>
+<!--
+                                    <td style="text-align: center">
+                                        <span>Allianz suchen</span>
+                                        <input style="vertical-align: middle;"  id="search-alliance-checkbox" type="checkbox">
+                                    </td>
+-->
+                                    <td style="text-align: center">
+                                        <input type="radio" id="player-search" name="search-type" value="${Actions.GetUsers}" checked="checked">
+                                        <label for="alliance-search">Spieler</label>
+                                        <input type="radio" id="alliance-search" name="search-type" value="${Actions.GetAlliances}">
+                                        <label for="alliance-search">Allianz</label>
+                                        <input type="radio" id="moon-search" name="search-type" value="${Actions.GetMoons}">
+                                        <label for="alliance-search">Mond</label>                                        
+                                        <input type="radio" id="moon-search" name="search-type" value="${Actions.GetInactives}">
+                                        <label for="alliance-search">Inaktiv</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center">
+                                        <input id="search-colony-btn" type="submit" value="Suchen">
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                    </div>
+                    <div id="colony-search-results-wrapper">
+                        <table id="colony-search-results">
+                        </table>
+                    </div>
                 </div>
             </div>
         `)
@@ -93,7 +150,7 @@ export class ColonySearch {
      * Alliance-Request Callback
      * @date 2022-03-30
      * @param {object} data
-     * @returns {any}
+     * @returns {void}
      */
     onAllianceUpdate(data) {
         data.forEach((alliance) => {
@@ -102,6 +159,16 @@ export class ColonySearch {
             })
         })
         this.setState({ data, action: Actions.GetAlliances })
+    }
+
+    /**
+     * Moons Request Callback
+     * @date 2022-04-06
+     * @param {any} data
+     * @returns {void}
+     */
+    onMoonUpdate(data) {
+        this.setState({ data, action: Actions.GetMoons })
     }
 
     /**
@@ -116,17 +183,37 @@ export class ColonySearch {
      * Form submission Callback
      * @param {object} event 
      */
-    onSubmit(event) {
-        event.preventDefault();
+    onSubmit(event = null) {
+        event?.preventDefault();
 
         var searchInput = $("#search-colony-input-user").val()
-        var shouldSearchForAlliance = $("#search-alliance-checkbox").is(":checked")
+        var type = $('input[name="search-type"]:checked').val()
 
-        if (shouldSearchForAlliance) {
-            var alliances = getColoniesByAlliance(searchInput, { done: this.onAllianceUpdate.bind(this) })
-        } else {
-            var users = getColoniesByUser(searchInput, { done: this.onUserUpdate.bind(this) })
+        console.debug({searchInput, type})
+
+        switch (type) {
+            case Actions.GetUsers:
+                var users = getColoniesByUser(searchInput, { done: this.onUserUpdate.bind(this) })
+                break;
+            case Actions.GetAlliances:
+                var alliances = getColoniesByAlliance(searchInput, { done: this.onAllianceUpdate.bind(this) })
+                break;
+            case Actions.GetMoons:
+                var moons = Requests.getMoons(searchInput, { done: this.onMoonUpdate.bind(this) })
+                break;
+            case "inactive":
+
+            default:
+                break;
         }
+
+        // var shouldSearchForAlliance = $("#search-alliance-checkbox").is(":checked")
+
+        // if (shouldSearchForAlliance) {
+        //     
+        // } else {
+        //     
+        // }
     }
 
 
@@ -214,34 +301,61 @@ export class ColonySearch {
         `)
 
         user.planets.forEach((planet) => {
-            var dataContainerId = `colony-data-${planet.coords.galaxy}-${planet.coords.system}-${planet.coords.position}`
-            var fleetContainerId = `colony-fleet-${planet.coords.galaxy}-${planet.coords.system}-${planet.coords.position}`
-
-            var planetSummary = new PlanetSummary(planet)
-
-            $(`#${idTableUserColonies}`).append(/*html*/`
-                <tr>
-                    <td>
-                        <a href="game.php?page=galaxy&galaxy=${planet.coords.galaxy}&system=${planet.coords.system}">
-                            [${planet.coords.galaxy}:${planet.coords.system}:${planet.coords.position}]
-                        </a>
-                    </td>
-                    <td>
-                        <span  data-toggle="collapse" data-target="#${dataContainerId}">
-                            ${planet.name}</td>
-                        </span>
-                </tr>
-
-                <tr>
-                    <td colspan="2">
-                        ${planetSummary.getHtml()}
-                        <div class="collapse" id="${dataContainerId}">
-                            ${this.getPlanetDataHtml(planet)}
-                        </div>
-                    </td>
-                </tr>
-                `)
+            this.outputPlanet(planet, idTableUserColonies)
         })
+    }
+
+    outputPlanet(planet, bindTo) {
+        var dataContainerId = `colony-data-${planet.coords.galaxy}-${planet.coords.system}-${planet.coords.position}`
+        var fleetContainerId = `colony-fleet-${planet.coords.galaxy}-${planet.coords.system}-${planet.coords.position}`
+
+        var planetSummary = new PlanetSummary(planet)
+
+        $(`#${bindTo}`).append(/*html*/`
+            <tr>
+                <td>
+                    <a href="game.php?page=galaxy&galaxy=${planet.coords.galaxy}&system=${planet.coords.system}">
+                        [${planet.coords.galaxy}:${planet.coords.system}:${planet.coords.position}]
+                    </a>
+                </td>
+                <td>
+                    <span  data-toggle="collapse" data-target="#${dataContainerId}">
+                        ${planet.name}
+                    </span>
+                </td>
+            </tr>
+            `)
+    }
+
+
+    outputMoons(data) {
+        $(this.colonyResultContainer).append(/*html*/`<table id="colony-search-results"></table>`)
+        data.forEach(moonData => {
+            var planet = new Planet(moonData)
+            this.outputMoon(planet, "colony-search-results", moonData.user.alliance?.name)
+        })
+    }
+
+    outputMoon(moon, bindTo, alliance) {
+        var dataContainerId = `colony-data-${moon.coords.galaxy}-${moon.coords.system}-${moon.coords.position}`
+        var fleetContainerId = `colony-fleet-${moon.coords.galaxy}-${moon.coords.system}-${moon.coords.position}`
+
+        var planetSummary = new PlanetSummary(moon)
+
+        $(`#${bindTo}`).append(/*html*/`
+            <tr>
+                <td>
+                    <a href="game.php?page=galaxy&galaxy=${moon.coords.galaxy}&system=${moon.coords.system}">
+                        [${moon.coords.galaxy}:${moon.coords.system}:${moon.coords.position}]
+                    </a>
+                </td>
+                <td>
+                    <span  data-toggle="collapse" data-target="#${dataContainerId}">
+                        ${alliance !== undefined ? alliance : "-"}
+                    </span>
+                </td>
+            </tr>
+            `)
     }
 
 
@@ -309,18 +423,18 @@ class EspionageTable {
     }
 
     getHtml() {
-        const {espionages} = this.props
-        if(Array.isArray(espionages)) {
-            
+        const { espionages } = this.props
+        if (Array.isArray(espionages)) {
+
             var elements = this.getElements()
         }
     }
 
     getElements() {
-        const {galaxy, system, position} = espionage.coords
+        const { galaxy, system, position } = espionage.coords
         var espioangeId = `espionage-full-${galaxy}-${system}-${position}`
         var html = ``
-        
+
         espionages.forEach(epsionage => {
             html += /*html*/`
                 <div class="espionage-summary">
@@ -341,7 +455,7 @@ class EspionageTable {
 
 class PlanetSummary {
     constructor(planet) {
-        if(!planet || !(planet instanceof Planet))
+        if (!planet || !(planet instanceof Planet))
             throw new Error(`Given parameter planet is not an instance of class Planet`)
 
         this.planet = planet
@@ -356,7 +470,7 @@ class PlanetSummary {
 
         var total = values.fleet + values.defense + values.structures
 
-        if(total == 0)
+        if (total == 0)
             return ``
 
         return /*html*/`
@@ -364,11 +478,11 @@ class PlanetSummary {
                 <tr>
                     <td>
                         <div class="icon"><i class="fa-solid fa-jet-fighter-up"></i></div>
-                        <div><b>${values.fleet / 1000 }</b></div>
+                        <div><b>${values.fleet / 1000}</b></div>
                     </td>
                     <td>
                         <div class="icon"><i class="fa-solid fa-shield"></i></div>
-                        <div><b>${values.defense / 1000 }</b></div>
+                        <div><b>${values.defense / 1000}</b></div>
                     </td>
                     <td>
                         <div class="icon"><i class="fa-solid fa-industry"></i></div>
@@ -382,7 +496,7 @@ class PlanetSummary {
 
 class PlanetController {
     constructor(planet) {
-        if(true)
+        if (true)
             return
     }
 }

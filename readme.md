@@ -22,14 +22,16 @@ Entweder man installiert es direkt über [diesen](https://github.com/kejith/spyl
 - Generell
     - [ ] Infos über Aktivität von Spielern sammeln
     - [ ] Targetliste
-    - [ ] Mondsuche
+    - [X] Mondsuche
+        - [ ] Gruppieren nach Allianz
+        - [ ] Inaktive und Umode gesondert
     - [ ] Inaktivensuche
     - [ ] API-Key implementieren
     - [ ] Expowecker
 - Übersicht
     - [ ] Ressourcenzusammenfassung von Flotten die Planten/Monde zurückfliegen
 - Galaxie
-    - [ ] Button um den Spieler zu suchen
+    - [X] Button um den Spieler zu suchen
 - Multi-language Support
     - [ ] Englisch
 

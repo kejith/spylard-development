@@ -7,6 +7,7 @@ import { setupPlayerCardUpdate } from './components/PlayercardUpdater';
 import { parseFleetsFromOverview } from './components/FleetParser';
 import { ColonySearch } from './components/ColonySearch';
 import { utils } from './utils';
+import { GalaxyUpdater } from './components/GalaxyUpdater';
 
 
 
@@ -34,8 +35,8 @@ import { utils } from './utils';
 
     // ======== GALAXY
     if (isPage("galaxy")) {
-        createUpdateButtonToGalaxyView()
-        getSystemInformation()
+        var galaxyUpdater = new GalaxyUpdater()
+        galaxyUpdater.init()
     }
 
     // ======== STATISTICS

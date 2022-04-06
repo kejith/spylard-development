@@ -4,7 +4,8 @@ export function onFailedRequest(jqxhr, textStatus, errorThrown) {
     console.error({ jqxhr, textStatus, errorThrown })
 }
 
-export const Request = {
+export const Requests = {
+    getMoons
 }
 
 const defaultFns = {
@@ -25,6 +26,16 @@ export function getColoniesByUser(user, fns) {
     fns = {...defaultFns, ...fns}
 
     var users = $.get(`${baseurl}/galaxy/system/planets?user=${user}`, fns.done)
+    .fail(fns.fail)
+    .always(fns.always)
+}
+
+export function getMoons(galaxy, fns) {
+    fns = {...defaultFns, ...fns}
+
+    var galaxyQuery = (galaxy) ? `?galaxy=${galaxy}` : ``
+
+    var users = $.get(`${baseurl}/galaxy/moons${galaxyQuery}`, fns.done)
     .fail(fns.fail)
     .always(fns.always)
 }
