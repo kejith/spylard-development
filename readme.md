@@ -29,9 +29,9 @@ Entweder man installiert es direkt über [diesen](https://github.com/kejith/spyl
 - Übersicht
     - [ ] Ressourcenzusammenfassung von Flotten die Planten/Monde zurückfliegen
 - Galaxie
-    - [ ] Button um den Spieler zu Suchen
+    - [ ] Button um den Spieler zu suchen
 - Multi-language Support
-    - [ ] English
+    - [ ] Englisch
 
 
 ## Known Bugs
