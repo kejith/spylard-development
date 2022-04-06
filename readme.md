@@ -17,4 +17,26 @@ Um Spylard zu installieren sollte zunächst die Browsererweiterung [Tampermonkey
 
 Entweder man installiert es direkt über [diesen](https://github.com/kejith/spylard-development/raw/gh-pages/index.prod.user.js) Link (es sollte ein Installationstab von Tampermonkey geöffnet werden) oder man nutzt [diesen](https://github.com/kejith/spylard-development/blob/gh-pages/index.prod.user.js) Link und klickt auf "Raw".
 
+## ROADMAP
+
+- Generell
+    - [ ] Infos über Aktivität von Spielern sammeln
+    - [ ] Targetliste
+    - [ ] Mondsuche
+    - [ ] Inaktivensuche
+    - [ ] API-Key implementieren
+    - [ ] Expowecker
+- Übersicht
+    - [ ] Ressourcenzusammenfassung von Flotten die auf Kolos zurückfliegen
+- Galaxie
+    - [ ] Button um den Spieler zu Suchen
+- Multi-language Support
+    - [ ] English
+
+
+## Known Bugs
+- Monde und Plantenspios überschreiben sich
+- Spionageberichte von Planten die noch nicht in der Galaxieansicht eingelesen wurden können nicht hochgeladen werden
+- 
+
 
