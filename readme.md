@@ -27,7 +27,7 @@ Entweder man installiert es direkt über [diesen](https://github.com/kejith/spyl
     - [ ] API-Key implementieren
     - [ ] Expowecker
 - Übersicht
-    - [ ] Ressourcenzusammenfassung von Flotten die auf Kolos zurückfliegen
+    - [ ] Ressourcenzusammenfassung von Flotten die Planten/Monde zurückfliegen
 - Galaxie
     - [ ] Button um den Spieler zu Suchen
 - Multi-language Support
