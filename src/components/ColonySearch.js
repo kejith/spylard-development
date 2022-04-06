@@ -324,6 +324,14 @@ export class ColonySearch {
                     </span>
                 </td>
             </tr>
+            <tr>
+                <td colspan="2">
+                    ${planetSummary.getHtml()}
+                    <div class="collapse" id="${dataContainerId}">
+                        ${this.getPlanetDataHtml(planet)}
+                    </div>
+                </td>
+            </tr>
             `)
     }
 
