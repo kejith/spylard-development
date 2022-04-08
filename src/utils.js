@@ -139,17 +139,19 @@ export const collapse = (selector, cmd) => {
 }
 
 export function setupTriggers() {
+    // Listen for click events, but only on our triggers
+    window.addEventListener('click', addCollapseEventTrigger, false);
+}
+
+function addCollapseEventTrigger(ev) {
     // Grab all the trigger elements on the page
     const triggers = Array.from(document.querySelectorAll('[data-toggle="collapse"]'));
-
-    // Listen for click events, but only on our triggers
-    window.addEventListener('click', (ev) => {
-        const elm = ev.target;
-        if (triggers.includes(elm)) {
-            const selector = elm.getAttribute('data-target');
-            collapse(selector, 'toggle');
-        }
-    }, false);
+    const elm = ev.target;
+    const doesIncludeElement = triggers.includes(elm)
+    if (doesIncludeElement) {
+        const selector = elm.getAttribute('data-target');
+        collapse(selector, 'toggle');
+    }
 }
 
 export function loadExternalJavascript(url) {
@@ -158,7 +160,7 @@ export function loadExternalJavascript(url) {
         url: url,
         dataType: "script",
         async: false
-      });
+    });
 
 
 }
@@ -213,14 +215,14 @@ function versionCompare(v1, v2, options) {
 export function loadCssFiles(urls, successCallback, failureCallback) {
 
     $.when.apply($,
-        $.map(urls, function(url) {
-            return $.get(url, function(css) {
+        $.map(urls, function (url) {
+            return $.get(url, function (css) {
                 $("<style>" + css + "</style>").appendTo("head");
             });
         })
-    ).then(function() {
+    ).then(function () {
         if (typeof successCallback === 'function') successCallback();
-    }).fail(function() {
+    }).fail(function () {
         if (typeof failureCallback === 'function') failureCallback();
     });
 

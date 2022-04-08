@@ -43,6 +43,7 @@ export class ColonySearch {
         if (this.state.action == Actions.GetMoons) {
             this.outputMoons(this.state.data)
         }
+
     }
 
     init() {
@@ -236,8 +237,6 @@ export class ColonySearch {
             `)
             this.outputUsers(alliance.members, $(allianceContainerID))
         })
-
-        setupTriggers()
     }
 
     /**
@@ -259,8 +258,6 @@ export class ColonySearch {
         users.forEach((user) => {
             this.outputUser(user, bindTo)
         })
-
-        setupTriggers()
     }
 
     /**
