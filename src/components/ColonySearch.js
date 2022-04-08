@@ -19,6 +19,9 @@ export class ColonySearch {
         this.wrapperClasses = options.wrapperClasses
         this.wrapperId = options.wrapperId
         this.colonyResultContainer = "#colony-search-results-wrapper"
+        this.state = {
+            isCollapsed: false,
+        }
 
     }
 
@@ -46,7 +49,15 @@ export class ColonySearch {
 
     }
 
+    loadState() {
+        var savedState = GM_getValue("colony-search-state", "{}")
+        if (savedState)
+            this.setState(JSON.parse(savedState))
+    }
+
     init() {
+        this.loadState()
+
         if(isPage("galaxy")) {
             $(`.table569`).find(`tr`).each((index, value) => {
                 var username = removeNewlinesAndTabs($(value).find("td").eq(5).text())
@@ -78,14 +89,15 @@ export class ColonySearch {
             })
         }
 
+        console.log(this.state)
         $(this.appendTo).append(/*html*/`
             <div id="${this.wrapperId}" class="${this.wrapperClasses}">
                 <div  style="text-align: right">                        
-                    <span  data-toggle="collapse" data-target="#colony-search-collapse-wrapper">
+                    <span id="search-colony-main-collapse" data-toggle="collapse" data-target="#colony-search-collapse-wrapper">
                         Suche auf-/zuklappen
                     </span>
                 </div>
-                <div id="colony-search-collapse-wrapper" class="collapse show">
+                <div id="colony-search-collapse-wrapper" class="collapse ${!this.state.isCollapsed ? "show" : ""}">
                     <div id="colony-search-wrapper">
                         <form id="search-colonies">
                             <table >
@@ -130,12 +142,14 @@ export class ColonySearch {
             e.preventDefault();
         });
 
+        $('#search-colony-main-collapse').bind("click", {}, (event) => {
+            this.onTriggerCollapse()
+        })
+
         var searchColoniesForm = document.getElementById("search-colonies")
         searchColoniesForm.addEventListener("submit", this.onSubmit.bind(this), true);
 
-        var savedState = GM_getValue("colony-search-state", "{}")
-        if (savedState)
-            this.setState(JSON.parse(savedState))
+        this.render()
     }
 
     /**
@@ -178,6 +192,10 @@ export class ColonySearch {
      */
     onUserUpdate(data) {
         this.setState({ data, action: Actions.GetUsers })
+    }
+
+    onTriggerCollapse() {
+        this.setState({isCollapsed: !this.state.isCollapsed})
     }
 
     /**
