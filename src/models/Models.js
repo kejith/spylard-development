@@ -168,7 +168,6 @@ export class Structures extends UnitCollection {
                 structureAmount = metal + crystal + deuterium
             }
 
-            console.log({structure, level, structureAmount, data:Data[this.category][structure]})
             amount += structureAmount
         })
 

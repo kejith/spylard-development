@@ -169,7 +169,7 @@ function parseEspionageHead(espionageReportQuery) {
             date = new Date(matches[0]);
 
             if (!isValidDate(date)) {
-                console.log({
+                console.debug({
                     metaInfoString,
                     matches,
                     date

@@ -19,10 +19,10 @@ const defaultFns = {
     always: () => { }
 }
 
-export function checkVersion(fns) {
+export async function checkVersion(fns) {
     fns = { ...defaultFns, ...fns }
 
-    $.get(`${baseurl}/check`, fns.done)
+    await $.get(`${baseurl}/check`, fns.done)
         .fail(fns.fail)
         .always(fns.always)
 }

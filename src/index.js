@@ -1,23 +1,20 @@
-import { createPlanetSearchContainer } from './components/ColonySearch';
-import { setupEspionageUpdate } from './components/EspionageUpdater';
-import { createUpdateButtonToGalaxyView, getSystemInformation } from './components/GalaxyUpdater';
-import './style/main.less';
-import { addGlobalStyle, isPage, setupTriggers } from './utils';
-import { setupPlayerCardUpdate } from './components/PlayercardUpdater';
-import { parseFleetsFromOverview } from './components/FleetParser';
+import Toastify from 'toastify-js';
 import { ColonySearch } from './components/ColonySearch';
-import { utils } from './utils';
+import { setupEspionageUpdate } from './components/EspionageUpdater';
+import { parseFleetsFromOverview } from './components/FleetParser';
 import { GalaxyUpdater } from './components/GalaxyUpdater';
+import { setupPlayerCardUpdate } from './components/PlayercardUpdater';
 import { Requests } from './requests';
-import Toastify from 'toastify-js'
+import './style/main.less';
+import { isPage, setupTriggers, utils } from './utils';
 
 
 
 (function () {
     'use strict';
 
-    utils.loadExternalJavascript("https://kit.fontawesome.com/dbf8ffc691.js")
-    utils.loadExternalJavascript("https://cdn.jsdelivr.net/npm/toastify-js")
+    // utils.loadExternalJavascript("https://kit.fontawesome.com/dbf8ffc691.js")
+    // utils.loadExternalJavascript("https://cdn.jsdelivr.net/npm/toastify-js")
 
     $("<link/>", {
         rel: "stylesheet",

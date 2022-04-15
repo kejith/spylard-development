@@ -46,7 +46,7 @@ export class GalaxyUpdater {
                 }
             },
             error: (jqxhr, status, error) => {
-                console.log(error)
+                console.error(error)
             }
         }
 
@@ -108,8 +108,8 @@ export class GalaxyUpdater {
         var system = parser.getSystem()
         this.sendSystem(system);
 
-        console.log(`${system.planets.length} Planets found.`);
-        console.log(system)
+        console.debug(`${system.planets.length} Planets found.`);
+        console.debug(system)
     }
 
 }
