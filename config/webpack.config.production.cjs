@@ -6,6 +6,7 @@ const webpackConfig = require('./webpack.config.base.cjs')
 
 const cfg = merge(webpackConfig, {
   mode: 'production',
+  watch: true,
   output: {
     filename: 'index.prod.user.js',
   },

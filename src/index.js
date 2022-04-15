@@ -13,7 +13,7 @@ import { isPage, setupTriggers, utils } from './utils';
 (function () {
     'use strict';
 
-    // utils.loadExternalJavascript("https://kit.fontawesome.com/dbf8ffc691.js")
+    utils.loadExternalJavascript("https://kit.fontawesome.com/dbf8ffc691.js")
     // utils.loadExternalJavascript("https://cdn.jsdelivr.net/npm/toastify-js")
 
     $("<link/>", {

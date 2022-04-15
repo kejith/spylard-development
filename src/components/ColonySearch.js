@@ -499,15 +499,15 @@ class PlanetSummary {
         return /*html*/`
             <table class="planet-summary">
                 <tr>
-                    <td>
+                    <td class="planet-category">
                         <div class="icon"><i class="fa-solid fa-jet-fighter-up"></i></div>
                         <div><b>${values.fleet / 1000}</b></div>
                     </td>
-                    <td>
+                    <td class="planet-category">
                         <div class="icon"><i class="fa-solid fa-shield"></i></div>
                         <div><b>${values.defense / 1000}</b></div>
                     </td>
-                    <td>
+                    <td class="planet-category">
                         <div class="icon"><i class="fa-solid fa-industry"></i></div>
                         <div><b>${Math.floor(values.structures / 1000)}</b></div>
                     </td>
