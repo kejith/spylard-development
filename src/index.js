@@ -8,19 +8,26 @@ import { Requests } from './requests';
 import './style/main.less';
 import { isPage, setupTriggers, utils } from './utils';
 
+function getShips() {
+    var ids = [202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215]
+    var ships = {}
+    ids.forEach(id => {
+        ships[id] = parseInt($(`[name="battleinput[0][0][${id}]"]`).val())
+    })
 
+    return ships
+}
 
 (function () {
     'use strict';
-
-    utils.loadExternalJavascript("https://kit.fontawesome.com/dbf8ffc691.js")
-    // utils.loadExternalJavascript("https://cdn.jsdelivr.net/npm/toastify-js")
 
     $("<link/>", {
         rel: "stylesheet",
         type: "text/css",
         href: "https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
     }).appendTo("head");
+
+    utils.loadExternalJavascript("https://kit.fontawesome.com/dbf8ffc691.js")
 
     Requests.checkVersion({
         done: (data) => {
@@ -44,8 +51,6 @@ import { isPage, setupTriggers, utils } from './utils';
             }
         }
     })
-
-
 
     setupTriggers()
 
@@ -78,6 +83,55 @@ import { isPage, setupTriggers, utils } from './utils';
     // ======== MESSAGES
     if (isPage("messages")) {
         setupEspionageUpdate()
+    }
+
+    // ======== MESSAGES
+    if (isPage("battleSimulator")) {
+        $("#submit td").append(/*html*/`
+            &nbsp;<button id="spylard-simulator-submit" type="button" class="btn btn-primary">Speichern</button>
+        `)
+
+        console.log("dsplsd")
+
+        var ids = [202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215]
+        var ships = {}
+        ids.forEach(id => {
+            var amount = parseInt($(`[name="battleinput[0][0][${id}]"]`).val())
+            console.log(amount)
+            var label = $(`[name="battleinput[0][0][${id}]"]`).parent().append(`<br/>${amount}`)
+        })
+
+        $("#spylard-simulator-submit").on("click", (e) => {
+            e.preventDefault()
+            var ships = getShips()
+            GM_setValue("calculatedShips", JSON.stringify(ships))
+
+            console.log(ships)
+
+            Toastify({
+                text: "Schiffe gespeichert",
+                duration: 3000,
+            }).showToast()
+
+        })
+
+    }
+
+    // is page fleetTable
+    if (isPage("fleetTable")) {
+        $(".table519 > tbody > tr").last().find("td").append(/*html*/
+            `&nbsp;<button id="spylard-simulator-paste" type="button" class="btn btn-primary">Einfügen</button>`
+        )
+
+        $("#spylard-simulator-paste").on("click", (e) => {
+            e.preventDefault()
+
+            var ships = JSON.parse(GM_getValue("calculatedShips", "{}"))
+            
+            Object.keys(ships).forEach(id => {
+                $(`#ship${id}_input`).val(ships[id])
+            })
+        })
     }
 
     // if (window.top === window.self) {
