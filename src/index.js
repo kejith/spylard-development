@@ -19,8 +19,6 @@ function getShips() {
 }
 
 (function () {
-    'use strict';
-
     $("<link/>", {
         rel: "stylesheet",
         type: "text/css",
