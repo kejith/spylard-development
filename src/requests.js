@@ -22,7 +22,9 @@ const defaultFns = {
 export async function checkVersion(fns) {
     fns = { ...defaultFns, ...fns }
 
-    await $.get(`${baseurl}/check`, fns.done)
+    var key = GM_getValue("spylard-api-key", "")
+
+    await $.get(`${baseurl}/check?&apiKey=${key}`, fns.done)
         .fail(fns.fail)
         .always(fns.always)
 }
@@ -30,7 +32,9 @@ export async function checkVersion(fns) {
 export function getColoniesByAlliance(alliance, fns) {
     fns = { ...defaultFns, ...fns }
 
-    $.get(`${baseurl}/alliance/?tag=${alliance}`, fns.done)
+    var key = GM_getValue("spylard-api-key", "")
+
+    $.get(`${baseurl}/alliance/?tag=${alliance}&apiKey=${key}`, fns.done)
         .fail(fns.fail)
         .always(fns.always)
 }
@@ -38,7 +42,9 @@ export function getColoniesByAlliance(alliance, fns) {
 export function getColoniesByUser(user, fns) {
     fns = { ...defaultFns, ...fns }
 
-    var users = $.get(`${baseurl}/galaxy/system/planets?user=${user}`, fns.done)
+    var key = GM_getValue("spylard-api-key", "")
+
+    var users = $.get(`${baseurl}/galaxy/system/planets?user=${user}&apiKey=${key}`, fns.done)
         .fail(fns.fail)
         .always(fns.always)
 }
@@ -46,9 +52,11 @@ export function getColoniesByUser(user, fns) {
 export function getMoons(galaxy, fns) {
     fns = { ...defaultFns, ...fns }
 
-    var galaxyQuery = (galaxy) ? `?galaxy=${galaxy}` : ``
+    var key = GM_getValue("spylard-api-key", "")
 
-    var users = $.get(`${baseurl}/galaxy/moons${galaxyQuery}`, fns.done)
+    var galaxyQuery = (galaxy) ? `&galaxy=${galaxy}` : ``
+
+    var users = $.get(`${baseurl}/galaxy/moons?apiKey=${key}${galaxyQuery}`, fns.done)
         .fail(fns.fail)
         .always(fns.always)
 }
@@ -56,8 +64,10 @@ export function getMoons(galaxy, fns) {
 export function loadEspionageInformation(ids, fns) {
     fns = { ...defaultFns, ...fns }
 
+    var key = GM_getValue("spylard-api-key", "")
+
     $.ajax({
-        url: `${baseurl}/espionage/check`,
+        url: `${baseurl}/espionage/check?&apiKey=${key}`,
         data: JSON.stringify(ids),
         type: 'POST',
         contentType: 'application/json',

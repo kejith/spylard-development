@@ -21,6 +21,7 @@ export class ColonySearch {
         this.colonyResultContainer = "#colony-search-results-wrapper"
         this.state = {
             isCollapsed: false,
+            apiKey: "",
         }
 
     }
@@ -51,8 +52,10 @@ export class ColonySearch {
 
     loadState() {
         var savedState = GM_getValue("colony-search-state", "{}")
-        if (savedState)
+        if (savedState){
+            console.log(savedState)
             this.setState(JSON.parse(savedState))
+        }
     }
 
     init() {
@@ -100,6 +103,16 @@ export class ColonySearch {
                 <div id="colony-search-collapse-wrapper" class="collapse ${!this.state.isCollapsed ? "show" : ""}">
                     <div id="colony-search-wrapper">
                         <form id="search-colonies">
+
+                            <table>
+                                <tr><th style="text-align: center">Api Key</th></tr>
+                                <tr>
+                                    <td><input id="spylard-api-key" type="text" value="${this.state.apiKey}"></td>
+                                </tr>
+                                <tr>
+                                    <td><input id="save-api-key" type="submit" value="Speichern"></td>
+                                </tr>
+                            </table>
                             <table >
                                 <tr><th style="text-align: center">Suche</th></tr>
                                 <tr><td style="text-align: center"><input id="search-colony-input-user" type="text"></td></tr>
@@ -111,6 +124,8 @@ export class ColonySearch {
                                         <input style="vertical-align: middle;"  id="search-alliance-checkbox" type="checkbox">
                                     </td>
 -->
+
+
                                     <td style="text-align: center">
                                         <input type="radio" id="player-search" name="search-type" value="${Actions.GetUsers}" checked="checked">
                                         <label for="alliance-search">Spieler</label>
@@ -146,10 +161,20 @@ export class ColonySearch {
             this.onTriggerCollapse()
         })
 
+        $('#save-api-key').bind("click", {}, this.onClickApiKey.bind(this))
+
         var searchColoniesForm = document.getElementById("search-colonies")
         searchColoniesForm.addEventListener("submit", this.onSubmit.bind(this), true);
 
         this.render()
+    }
+
+    onClickApiKey(event) {
+        event.preventDefault()
+        var key = $("#spylard-api-key").val()
+        console.log(key)
+        this.setState({apiKey: key})
+        GM_setValue("spylard-api-key", key)
     }
 
     /**
