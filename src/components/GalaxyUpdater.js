@@ -21,8 +21,9 @@ export class GalaxyUpdater {
     }
 
     loadSystemInformation(galaxy, system) {
+        var key = GM_getValue("spylard-api-key", "")
         const parameters = {
-            url: `${baseurl}/galaxy/system/?galaxy=${galaxy}&system=${system}`,
+            url: `${baseurl}/galaxy/system/?galaxy=${galaxy}&system=${system}&apiKey=${key}`,
             type: 'GET',
             contentType: 'application/json',
             success: (data, status, xhr) => {
@@ -56,10 +57,11 @@ export class GalaxyUpdater {
     }
 
     removeDeleted(planets) {
+        var key = GM_getValue("spylard-api-key", "")
         console.debug(`=== removeDeleted()`)
 
         const parameters = {
-            url: `${baseurl}/galaxy/system/delete`,
+            url: `${baseurl}/galaxy/system/delete?&apiKey=${key}`,
             type: 'POST',
             data: JSON.stringify(planets),
             contentType: 'application/json',
@@ -75,8 +77,9 @@ export class GalaxyUpdater {
     }
 
     sendSystem = (data) => {
+        var key = GM_getValue("spylard-api-key", "")
         const parameters = {
-            url: `${baseurl}/galaxy/system/update`,
+            url: `${baseurl}/galaxy/system/update?&apiKey=${key}`,
             data: JSON.stringify(data),
             contentType: 'application/json',
             type: 'POST',
