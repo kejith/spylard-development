@@ -27,6 +27,7 @@ function getShips() {
 
     utils.loadExternalJavascript("https://kit.fontawesome.com/dbf8ffc691.js")
 
+    
     Requests.checkVersion({
         done: (data) => {
 
