@@ -11,7 +11,7 @@ Folgende Daten können gesammelt werden:
 
 ## Getting started
 
-Spylard wurde für Tampermonkey entwickelt. Es sollte auch mit Greasemonkey funktionieren, jedoch wäre dies nicht empfohlen, da Fehler die dabei entstehen könnte nicht behoben werden.
+Spylard wurde für Tampermonkey entwickelt. Es sollte auch mit Greasemonkey funktionieren, jedoch wäre dies nicht empfohlen.
 
 Um Spylard zu installieren sollte zunächst die Browsererweiterung [Tampermonkey](https://www.tampermonkey.net/) installiert werden. Danach muss nur noch das Script selbst installiert werden.
 
