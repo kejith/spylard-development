@@ -80,7 +80,7 @@ function getShips() {
 
     // ======== MESSAGES
     if (isPage("messages")) {
-        setupEspionageUpdate()
+        //setupEspionageUpdate()
     }
 
     // ======== MESSAGES
