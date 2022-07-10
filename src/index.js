@@ -18,6 +18,7 @@ function getShips() {
     return ships
 }
 
+
 (function () {
     $("<link/>", {
         rel: "stylesheet",
@@ -27,7 +28,7 @@ function getShips() {
 
     utils.loadExternalJavascript("https://kit.fontawesome.com/dbf8ffc691.js")
 
-    
+
     Requests.checkVersion({
         done: (data) => {
 
