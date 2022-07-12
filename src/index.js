@@ -48,9 +48,10 @@ function versionCheck() {
                         destination: "https://github.com/kejith/spylard-development/raw/gh-pages/index.prod.user.js",
                         newWindow: true,
                     }).showToast()
+                } else {
+                    GM_setValue("spylard-version-check-timestamp", new Date().toString())
                 }
 
-                GM_setValue("spylard-version-check-timestamp", new Date().toString())
             }
         })
     }
