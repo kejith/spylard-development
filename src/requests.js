@@ -23,8 +23,9 @@ export async function checkVersion(fns) {
     fns = { ...defaultFns, ...fns }
 
     var key = GM_getValue("spylard-api-key", "")
+    var user = GM_getValue("spylard-user", "")
 
-    await $.get(`${baseurl}/check?&apiKey=${key}`, fns.done)
+    await $.get(`${baseurl}/check?&apiKey=${key}&user=${user}`, fns.done)
         .fail(fns.fail)
         .always(fns.always)
 }

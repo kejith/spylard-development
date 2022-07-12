@@ -29,17 +29,21 @@ function getShips() {
 
     utils.loadExternalJavascript("https://kit.fontawesome.com/dbf8ffc691.js")
 
+    var user = $(".planetImage.no-mobile").find("a").eq(0).text()
+    GM_setValue("spylard-user", user)
 
     Requests.checkVersion({
         done: (data) => {
 
             const versions = {
                 new: data.version,
-                current: GM_info.script.version
+                current: GM_info.script.version,
             }
 
             var comparedVersions = utils.versionCompare(versions.current, versions.new)
             console.debug({...versions, compared: comparedVersions })
+
+            
 
 
             if (comparedVersions < 0) {
