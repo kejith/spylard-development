@@ -18,6 +18,44 @@ function getShips() {
     return ships
 }
 
+function versionCheck() {
+    
+    var lastVersionCheck = GM_getValue("spylard-version-check-timestamp")
+    var lastCheckDate = new Date(lastVersionCheck)
+    var currentDate = new Date()
+
+    var deltaVersionCheck = currentDate - lastCheckDate
+
+    if(deltaVersionCheck > 10 * 60 * 1000) {
+        Requests.checkVersion({
+            done: (data) => {
+
+                const versions = {
+                    new: data.version,
+                    current: GM_info.script.version,
+                }
+
+                var comparedVersions = utils.versionCompare(versions.current, versions.new)
+                console.debug({...versions, compared: comparedVersions })
+
+                
+
+
+                if (comparedVersions < 0) {
+                    Toastify({
+                        text: "Es gibt eine neuere Version für Spylard, bitte updaten!",
+                        duration: 10000,
+                        destination: "https://github.com/kejith/spylard-development/raw/gh-pages/index.prod.user.js",
+                        newWindow: true,
+                    }).showToast()
+                }
+
+                GM_setValue("spylard-version-check-timestamp", new Date().toString())
+            }
+        })
+    }
+}
+
 
 
 (function () {
@@ -32,31 +70,7 @@ function getShips() {
     var user = $(".planetImage.no-mobile").find("a").eq(0).text()
     GM_setValue("spylard-user", user)
 
-    Requests.checkVersion({
-        done: (data) => {
-
-            const versions = {
-                new: data.version,
-                current: GM_info.script.version,
-            }
-
-            var comparedVersions = utils.versionCompare(versions.current, versions.new)
-            console.debug({...versions, compared: comparedVersions })
-
-            
-
-
-            if (comparedVersions < 0) {
-                Toastify({
-                    text: "Es gibt eine neuere Version für Spylard, bitte updaten!",
-                    duration: 10000,
-                    destination: "https://github.com/kejith/spylard-development/raw/gh-pages/index.prod.user.js",
-                    newWindow: true,
-                }).showToast()
-            }
-        }
-    })
-
+    versionCheck()
     setupTriggers()
 
     var colonySearch = new ColonySearch({
