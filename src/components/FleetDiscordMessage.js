@@ -43,8 +43,8 @@ export function copyFleetDiscordMessage(){
         data.shield = techStrings[1]
         data.armour = techStrings[2]
         data.combustion = techStrings[3]
-        data.impuls = techStrings[4]
-        data.hyper = techStrings[5]
+        data.impuls = techStrings[4] / 2
+        data.hyper = techStrings[5] / 3
 
         var message = createDiscordMessage(data)
         navigator.clipboard.writeText(message).then(function() {
