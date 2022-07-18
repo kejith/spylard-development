@@ -41,7 +41,7 @@ export class ColonySearch {
             this.outputUsers(users)
         }
         if (this.state.action == Actions.GetAlliances) {
-            var alliances = AllianceReader.fromData(this.state.data)
+            var alliances = AllianceReader.fromData(this.state.data, this.state.galaxy)
             this.outputAlliance(alliances)
         }
         if (this.state.action == Actions.GetMoons) {
@@ -138,6 +138,23 @@ export class ColonySearch {
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td>
+                                        <label for="galaxy-selector">Galaxy</label>
+                                        <select name="galaxy-selector" id="galaxy-selector">
+                                            <option value="0">Alle</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                            <option value="7">7</option>
+                                            <option value="8">8</option>
+                                            <option value="9">9</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td style="text-align: center">
                                         <input id="search-colony-btn" type="submit" value="Suchen">
                                     </td>
@@ -193,12 +210,14 @@ export class ColonySearch {
      * @returns {void}
      */
     onAllianceUpdate(data) {
+        var galaxy = $('#galaxy-selector').val()
+
         data.forEach((alliance) => {
             alliance.users.forEach((user) => {
                 user.alliance = { id: alliance.id, name: alliance.name }
             })
         })
-        this.setState({ data, action: Actions.GetAlliances })
+        this.setState({ data, action: Actions.GetAlliances, galaxy })
     }
 
     /**
@@ -232,8 +251,9 @@ export class ColonySearch {
 
         var searchInput = $("#search-colony-input-user").val()
         var type = $('input[name="search-type"]:checked').val()
+        var galaxy = $('#galaxy-selector').val()
 
-        console.debug({searchInput, type})
+        console.debug({searchInput, type, galaxy})
 
         switch (type) {
             case Actions.GetUsers:

@@ -221,13 +221,13 @@ export class Alliance extends Component {
 }
 
 export class AllianceReader {
-    static fromData(data) {
+    static fromData(data, galaxy = 0) {
         var alliances = []
         if (Array.isArray(data)) {
             // alliance loop
             data.forEach(allianceData => {
                 var alliance = new Alliance(allianceData)
-                var users = UserReader.fromData(allianceData.users)
+                var users = UserReader.fromData(allianceData.users, galaxy)
 
                 users.forEach(user => {
                     alliance.addMember(user)
@@ -242,7 +242,7 @@ export class AllianceReader {
 }
 
 export class UserReader {
-    static fromData(data){
+    static fromData(data, galaxy = 0){
         if(Array.isArray(data)){
             var users = []
             data.forEach(userData => {
@@ -251,6 +251,9 @@ export class UserReader {
                 if(Array.isArray(userData.planets)) {
                     userData.planets.forEach(planetData => {
                         var planet = new Planet(planetData)
+                        console.log({galaxy, planetGalaxy: planet.coords.galaxy})
+                        if(galaxy == 0 || galaxy == planet.coords.galaxy) {
+
 
                         if (planetData.espionages && Array.isArray(planetData.espionages)) {
                             // espionage loop
@@ -260,7 +263,9 @@ export class UserReader {
                             })
                         }
 
+                        
                         user.addPlanet(planet)
+                        }
                     })
                 }
 
