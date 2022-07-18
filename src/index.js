@@ -4,6 +4,7 @@ import { setupEspionageUpdate } from './components/EspionageUpdater';
 import { parseFleetsFromOverview } from './components/FleetParser';
 import { GalaxyUpdater } from './components/GalaxyUpdater';
 import { setupPlayerCardUpdate } from './components/PlayercardUpdater';
+import { copyFleetDiscordMessage } from './components/FleetDiscordMessage';
 import { Requests } from './requests';
 import './style/main.less';
 import { isPage, setupTriggers, utils } from './utils';
@@ -139,7 +140,7 @@ function versionCheck() {
 
     // is page fleetTable
     if (isPage("fleetTable")) {
-        $(".table519 > tbody > tr").last().find("td").append(/*html*/
+        $(".table519 > tbody > tr").last().find("td").prepend(/*html*/
             `&nbsp;<button id="spylard-simulator-paste" type="button" class="btn btn-primary">Einfügen</button>`
         )
 
@@ -152,6 +153,8 @@ function versionCheck() {
                 $(`#ship${id}_input`).val(ships[id])
             })
         })
+
+        copyFleetDiscordMessage()
     }
 
     // if (window.top === window.self) {
