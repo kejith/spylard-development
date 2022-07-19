@@ -18,7 +18,7 @@ export function copyFleetDiscordMessage(){
             }
         }
 
-        $(".table519 > tbody").find("tr").slice(2, -4).each(function(i, element) {
+        $(".table519 > tbody").find("tr").slice(2, -3).each(function(i, element) {
             data.ships.push({
                 name: $(this).find("a").eq(0).text(),
                 amount: $(this).find("td").eq(1).text()
