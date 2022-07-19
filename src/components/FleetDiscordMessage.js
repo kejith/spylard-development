@@ -59,9 +59,10 @@ function createDiscordMessage(data) {
     let message = `\`\`\`
 ${Object.keys(data.ships).map((key) => {
     var ship = data.ships[key]
-    return `${ship.name.padStart(19)}: ${ship.amount.padStart(6)}`
-}).join("\n")}
-
+    if(ship.name !== "") {
+       return `${ship.name.padStart(19)}: ${ship.amount.padStart(6)}\n`
+    }
+}).join("")}
 Waffen: ${data.weapon} - Schild: ${data.shield} - Panzer: ${data.armour}
 Verbrennung: ${data.combustion} - Impuls: ${data.impuls} - Hyper: ${data.hyper} 
 \`\`\``
