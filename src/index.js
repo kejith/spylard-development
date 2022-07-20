@@ -140,7 +140,7 @@ function versionCheck() {
 
     // is page fleetTable
     if (isPage("fleetTable")) {
-        $(".table519 > tbody > tr").last().find("td").prepend(/*html*/
+        $(".table519 > tbody > tr").last().find("td").append(/*html*/
             `&nbsp;<button id="spylard-simulator-paste" type="button" class="btn btn-primary">Einfügen</button>`
         )
 

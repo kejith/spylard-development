@@ -1,5 +1,5 @@
 export function copyFleetDiscordMessage(){
-    $(".table519 > tbody > tr").last().find("td").prepend(/*html*/
+    $(".table519 > tbody > tr").last().find("td").append(/*html*/
         `&nbsp;<button id="spylard-discord-copy" type="button" class="btn btn-primary">Discord</button>`
     )
 
