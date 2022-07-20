@@ -140,21 +140,24 @@ function versionCheck() {
 
     // is page fleetTable
     if (isPage("fleetTable")) {
-        $(".table519 > tbody > tr").last().find("td").append(/*html*/
-            `&nbsp;<button id="spylard-simulator-paste" type="button" class="btn btn-primary">Einfügen</button>`
-        )
+        console.log($(".table519 > tbody > tr").last().find("td"))
+        if($(".table519 > tbody > tr").last().find("td").length < 2){
+            $(".table519 > tbody > tr").last().find("td").append(/*html*/
+                `&nbsp;<button id="spylard-simulator-paste" type="button" class="btn btn-primary">Einfügen</button>`
+            )
 
-        $("#spylard-simulator-paste").on("click", (e) => {
-            e.preventDefault()
+            $("#spylard-simulator-paste").on("click", (e) => {
+                e.preventDefault()
 
-            var ships = JSON.parse(GM_getValue("calculatedShips", "{}"))
-            
-            Object.keys(ships).forEach(id => {
-                $(`#ship${id}_input`).val(ships[id])
+                var ships = JSON.parse(GM_getValue("calculatedShips", "{}"))
+                
+                Object.keys(ships).forEach(id => {
+                    $(`#ship${id}_input`).val(ships[id])
+                })
             })
-        })
 
-        copyFleetDiscordMessage()
+            copyFleetDiscordMessage()
+        }
     }
 
     // if (window.top === window.self) {
