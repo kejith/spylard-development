@@ -65,7 +65,7 @@ function versionCheck() {
         `
     );
 
-    
+    $('content').css('overflow-x', 'auto')
 
 
     $("<link/>", {
