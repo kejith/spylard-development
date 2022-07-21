@@ -94,10 +94,10 @@ export class ColonySearch {
 
         console.log(this.state)
         $(this.appendTo).append(/*html*/`
-            <div id="${this.wrapperId}" class="${this.wrapperClasses}">
+            
                 <div  style="text-align: right">                        
                     <span id="search-colony-main-collapse" data-toggle="collapse" data-target="#colony-search-collapse-wrapper">
-                        Suche auf-/zuklappen
+                        Spylard-Suche auf-/zuklappen
                     </span>
                 </div>
                 <div id="colony-search-collapse-wrapper" class="collapse ${!this.state.isCollapsed ? "show" : ""}">
