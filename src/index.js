@@ -20,14 +20,14 @@ function getShips() {
 }
 
 function versionCheck() {
-    
+
     var lastVersionCheck = GM_getValue("spylard-version-check-timestamp")
     var lastCheckDate = new Date(lastVersionCheck)
     var currentDate = new Date()
 
     var deltaVersionCheck = currentDate - lastCheckDate
 
-    if(deltaVersionCheck > 10 * 60 * 1000) {
+    if (deltaVersionCheck > 10 * 60 * 1000) {
         Requests.checkVersion({
             done: (data) => {
 
@@ -37,9 +37,9 @@ function versionCheck() {
                 }
 
                 var comparedVersions = utils.versionCompare(versions.current, versions.new)
-                console.debug({...versions, compared: comparedVersions })
+                console.debug({ ...versions, compared: comparedVersions })
 
-                
+
 
 
                 if (comparedVersions < 0) {
@@ -58,9 +58,16 @@ function versionCheck() {
     }
 }
 
-
-
 (function () {
+    $('body > div.wrapper').append(/*html*/ 
+        `
+            <div id="" class="no-mobile colony-search-container"></div>
+        `
+    );
+
+    
+
+
     $("<link/>", {
         rel: "stylesheet",
         type: "text/css",
@@ -75,8 +82,9 @@ function versionCheck() {
     versionCheck()
     setupTriggers()
 
+    
     var colonySearch = new ColonySearch({
-        appendTo: 'body > div.wrapper',
+        appendTo: 'body > div.wrapper > .colony-search-container',
         wrapperClasses: 'no-mobile colony-search-container',
         wrapperId: ''
     })
@@ -108,6 +116,8 @@ function versionCheck() {
 
     // ======== MESSAGES
     if (isPage("battleSimulator")) {
+
+
         $("#submit td").append(/*html*/`
             &nbsp;<button id="spylard-simulator-submit" type="button" class="btn btn-primary">Speichern</button>
         `)
@@ -138,26 +148,35 @@ function versionCheck() {
 
     }
 
+
+
     // is page fleetTable
     if (isPage("fleetTable")) {
-        console.log($(".table519 > tbody > tr").last().find("td"))
-        if($(".table519 > tbody > tr").last().find("td").length < 2){
-            $(".table519 > tbody > tr").last().find("td").append(/*html*/
-                `&nbsp;<button id="spylard-simulator-paste" type="button" class="btn btn-primary">Einfügen</button>`
-            )
+        $($(".table519 > tbody > tr").eq(1)).before(/*html*/ `
+            <tr>
+                <td id="fleet-button-container" colspan="4">
+                </td>
+            </tr>
+        `)
 
-            $("#spylard-simulator-paste").on("click", (e) => {
-                e.preventDefault()
+        $("#fleet-button-container").append(/*html*/ 
+            `<button id="spylard-simulator-paste" type="button" class="btn btn-primary">Einfügen</button>`
+        )
 
-                var ships = JSON.parse(GM_getValue("calculatedShips", "{}"))
-                
-                Object.keys(ships).forEach(id => {
-                    $(`#ship${id}_input`).val(ships[id])
-                })
+
+
+        $("#spylard-simulator-paste").on("click", (e) => {
+            e.preventDefault()
+
+            var ships = JSON.parse(GM_getValue("calculatedShips", "{}"))
+
+            Object.keys(ships).forEach(id => {
+                $(`#ship${id}_input`).val(ships[id])
             })
+        })
 
-            copyFleetDiscordMessage()
-        }
+        copyFleetDiscordMessage()
+
     }
 
     // if (window.top === window.self) {
