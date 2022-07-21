@@ -61,7 +61,7 @@ function versionCheck() {
 (function () {
     $('body > div.wrapper').append(/*html*/ 
         `
-            <div id="" class="no-mobile colony-search-container"></div>
+            <div id="spylard" class="no-mobile colony-search-container"></div>
         `
     );
 
@@ -185,5 +185,40 @@ function versionCheck() {
     // else {
     //     console.log("iframe")
     // }
+
+    function doesAtainsScriptExist() {
+        return $("#atain").length > 0 
+    }
+
+    function copyAttainsScript() {
+        
+        var parent = $("#atain").parent()
+        if(parent.attr("id") !== "spylard") {
+            var script = $("#atain").detach()
+            $("#spylard").append(script)
+            parent.remove()
+        }
+    }
+
+    if(doesAtainsScriptExist()) {
+        copyAttainsScript()
+    } else {
+        var wrapperContainer = document.getElementsByClassName("wrapper")
+        if (wrapperContainer.length > 0) {
+            var wrapper = wrapperContainer[0]
+
+            var observer = new MutationObserver((mutations, observer) => {
+                for(const mutation of mutations) {
+                    if (mutation.type === 'childList') {
+                        copyAttainsScript()
+                    }
+                }
+            });
+
+            observer.observe(wrapper, { childList: true });
+        }
+    }
+
+
 
 })();
